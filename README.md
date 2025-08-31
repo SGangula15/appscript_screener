@@ -76,13 +76,5 @@ Use “Add Ticker Manually” (menu prompt) to enter a ticker, choose a target s
 - “Insider Ownership %” = Σ(securitiesOwned last 12 months) ÷ outstandingShares × 100.
 - Install “Daily @ 9:05 AM ET” to run the full pipeline automatically.
 
-## Sharing the GitHub repository (private)
-To grant access to specific people:
-1) On GitHub, open the repo → Settings → Collaborators and teams (or “Manage access”).
-2) Click “Add people”, enter their GitHub username or email, choose a role (e.g., Read, Triage, Write, Maintain, Admin), and invite.
-3) They’ll receive an email to accept the invite.
-
-For organizations, you can add users via a team and assign the team to the repo with appropriate permissions.
-
 ---
 License: see LICENSE.
