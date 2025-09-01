@@ -354,6 +354,7 @@ function resetUniverse(){
     "• Debt/Equity (TTM) < 1",
     "• Gross Margin (TTM) > 30%",
     "• Net Margin (TTM) > 10%",
+    "• Operating Cash Flow (TTM)/EBITDA > 0.7",
     "• EPS YoY (annual) growth > 20%",
     "• P/E < Industry PE (median)",
     "• Net Margin (TTM) > Industry Median Net Margin"
@@ -362,7 +363,8 @@ function resetUniverse(){
     "Criteria:",
     "• Annual EPS Growth > 20%",
     "• PEG (TTM) < 1",
-    "• P/E (TTM) < 40"
+    "• P/E (TTM) < 40",
+    "• Operating Cash Flow (TTM)/EBITDA > 0.7"
   ]);
   resetAndSyncScreener_("Non-Profitable", [
     "Criteria:",
@@ -1504,10 +1506,11 @@ function updateValueStocks(){
     const gm=pctToDecimal_(Number(r[idx("Gross Margin (TTM)")])); 
     const nm=pctToDecimal_(Number(r[idx("Net Margin (TTM)")]));   
     const epsY=pctToDecimal_(Number(r[idx("EPS YoY (annual) growth")]));
+    const ocfE=Number(r[idx("Operating Cash Flow (TTM)/EBITDA")]);
     const indPE=medPE.get(ind), indNM=medNM.get(ind);
-    if ([pe,roe5,roce,peg,de,gm,nm,epsY,indPE,indNM].some(v=>v==null||isNaN(v))) continue;
+    if ([pe,roe5,roce,peg,de,gm,nm,epsY,ocfE,indPE,indNM].some(v=>v==null||isNaN(v))) continue;
 
-    const pass = pe<20 && roe5>0.15 && roce>0.15 && peg<1 && de<1 && gm>0.30 && nm>0.10 && epsY>0.20 && pe<indPE && nm>indNM;
+    const pass = pe<20 && roe5>0.15 && roce>0.15 && peg<1 && de<1 && gm>0.30 && nm>0.10 && epsY>0.20 && ocfE>0.7 && pe<indPE && nm>indNM;
     if (pass) selected.push(r);
   }
   const desc=[
@@ -1519,6 +1522,7 @@ function updateValueStocks(){
     "• Debt/Equity (TTM) < 1",
     "• Gross Margin (TTM) > 30%",
     "• Net Margin (TTM) > 10%",
+    "• Operating Cash Flow (TTM)/EBITDA > 0.7",
     "• EPS YoY (annual) growth > 20%",
     "• P/E < Industry PE (median)",
     "• Net Margin (TTM) > Industry Median Net Margin"
@@ -1534,11 +1538,14 @@ function updateGrowthStocks(){
   const idx=n=>header.indexOf(n);
   const selected=[];
   for (const r of rows){
-    const epsY=pctToDecimal_(Number(r[idx("EPS YoY (annual) growth")])); const peg=Number(r[idx("PEG (TTM)")]); const pe=Number(r[idx("P/E (TTM)")]);
-    if ([epsY,peg,pe].some(v=>v==null||isNaN(v))) continue;
-    if (epsY>0.20 && peg<1 && pe<40) selected.push(r);
+    const epsY=pctToDecimal_(Number(r[idx("EPS YoY (annual) growth")]));
+    const peg=Number(r[idx("PEG (TTM)")]);
+    const pe=Number(r[idx("P/E (TTM)")]);
+    const ocfE=Number(r[idx("Operating Cash Flow (TTM)/EBITDA")]);
+    if ([epsY,peg,pe,ocfE].some(v=>v==null||isNaN(v))) continue;
+    if (epsY>0.20 && peg<1 && pe<40 && ocfE>0.7) selected.push(r);
   }
-  const desc=["Criteria:","• Annual EPS Growth > 20%","• PEG (TTM) < 1","• P/E (TTM) < 40"];
+  const desc=["Criteria:","• Annual EPS Growth > 20%","• PEG (TTM) < 1","• P/E (TTM) < 40","• Operating Cash Flow (TTM)/EBITDA > 0.7"];
   const {sheet,headerRow,firstDataRow}=ensureFilterSheetForScreener_("Growth", header, desc);
   const existing = getExistingTickersSet_(sheet, firstDataRow);
   const toAppend=selected.filter(r=>{const sym=String(r[0]||"").trim().toUpperCase(); return sym && !existing.has(sym);});
@@ -1719,8 +1726,8 @@ function createOrUpdateReadmeSheet() {
   sh.getRange(`A${r3}:C${r3}`).merge().setFontWeight("bold").setBackground("#f1f3f4");
   r3++;
   const screenersRows = [
-    ["Value Stocks", "P/E<20; ROE(5Y)>15%; ROCE>15%; PEG<1; D/E<1; GM>30%; NM>10%; EPS YoY>20%; P/E<Industry PE", ""],
-    ["Growth Stocks", "EPS YoY>20%; PEG<1; P/E<40", ""],
+    ["Value Stocks", "P/E<20; ROE(5Y)>15%; ROCE>15%; PEG<1; D/E<1; GM>30%; NM>10%; OCF/EBITDA>0.7; EPS YoY>20%; P/E<Industry PE", ""],
+    ["Growth Stocks", "EPS YoY>20%; PEG<1; P/E<40; OCF/EBITDA>0.7", ""],
     ["Non-Profitable Growth", "Revenue YoY>30%; P/S<5; EV/Sales<5; D/E<1; Current Ratio>1.5; MktCap>$500M", ""],
   ];
   set(`A${r3}:C${r3+screenersRows.length-1}`, screenersRows);
