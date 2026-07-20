@@ -1,0 +1,5 @@
+export const nav = ['About','V Platform Solutions','Engineering Services','Staffing','AI Solutions','Industries','Careers','Contact'];
+export const domains = ['Vehicle Engineering','Systems Engineering','Embedded Software','Hardware Engineering','Validation','Cybersecurity','Functional Safety','Artificial Intelligence','Diagnostics','AUTOSAR','Adaptive AUTOSAR','Cloud Engineering','DevOps'];
+export const technologies = ['AUTOSAR','Adaptive AUTOSAR','MATLAB','Simulink','Embedded Linux','QNX','RTOS','CAN','LIN','Ethernet','DoIP','Python','C++','AWS','Azure','GCP','Docker','Kubernetes','GitHub','GitLab','Jenkins','Vector','CANoe','CANalyzer','vTESTstudio','Elektrobit','ETAS'];
+export const vStages = ['Customer Needs','Vehicle Requirements','System Requirements','Hardware Requirements','Software Requirements','Architecture','Implementation','Unit Testing','Integration Testing','Verification','Validation','Production'];
+export const aiCards = ['AI Requirement Analysis','AI Traceability','AI Test Generation','AI Knowledge Assistant','LLM Solutions','Agentic AI','RAG','Code Generation','Engineering Copilot'];
