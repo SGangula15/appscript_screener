@@ -1,0 +1,2 @@
+import { cn } from '@/lib/utils';
+export function Section({eyebrow,title,children,className}:{eyebrow?:string;title:string;children:React.ReactNode;className?:string}){return <section className={cn('mx-auto max-w-7xl px-5 py-24',className)}>{eyebrow&&<p className="mb-4 text-sm uppercase tracking-[.35em] text-[#2BA8FF]">{eyebrow}</p>}<h2 className="max-w-4xl text-4xl font-semibold tracking-[-.04em] text-white md:text-7xl">{title}</h2><div className="mt-12">{children}</div></section>}
